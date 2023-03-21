@@ -1,0 +1,7 @@
+ru\ann\App.class
+ru\ann\impl\AverageRate.class
+ru\ann\impl\Command.class
+ru\ann\impl\Period.class
+ru\ann\core\AlgorithmRate.class
+ru\ann\impl\CurrencyData.class
+ru\ann\impl\CurrencyName.class
