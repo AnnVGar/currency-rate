@@ -7,6 +7,7 @@ import ru.ann.domain.CurrencyName;
 import ru.ann.domain.Period;
 import ru.ann.service.CommandService;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +15,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class ConsoleController {
 
-    private final Pattern RATE_COMMAND_PATTERN = Pattern.compile("RATE " + "(?:" + CurrencyName.valueForRegExp() + ") " + "(?:" + Period.valueForRegExp() + ")");
+    private final Pattern RATE_COMMAND_PATTERN = Pattern.compile("RATE " + "(?:" + CurrencyName.valueForRegExp() + ") "
+            + "(?:" + Period.valueForRegExp() + ")");
     private final CommandService commandService = new CommandService();
 
     /**
@@ -33,7 +35,7 @@ public class ConsoleController {
                 String[] commandString = commandLine.split(" ");
                 String currencyName = commandString[1];
                 String period = commandString[2];
-                Command command = new Command(currencyName, period, algorithmRate);
+                Command command = new Command(currencyName, period, LocalDate.now(),algorithmRate);
                 commandService.setCommand(command);
                 commandService.executeRate();
                 printRate();

@@ -16,7 +16,6 @@ import java.util.List;
 
 @Slf4j
 public class CurrencyImportService {
-    private static final int RATE_DAY_QUANTITY = 7;
     private static final String SEPARATOR = File.separator;
     private static final RoundingMode roundingMode = RoundingMode.HALF_UP;
     private static final CurrencyDataRespository respository = new CurrencyDataRespository();
@@ -40,9 +39,10 @@ public class CurrencyImportService {
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine();
-            for (int i = 0; i < RATE_DAY_QUANTITY; i++) {
-                String[] commandLine = br.readLine().split(";");
-                int nominal = Integer.parseInt(commandLine[0]);
+            String str;
+            while ((str = br.readLine()) != null) {
+                String[] commandLine = str.split(";");
+                int nominal = Integer.parseInt(commandLine[0].replace(" ",""));
                 LocalDate date = LocalDate.parse(commandLine[1], DateUtils.UPLOAD_FORMATTER);
                 BigDecimal curs = new BigDecimal(commandLine[2].replace(",","."));
                 String cdx = commandLine[3];

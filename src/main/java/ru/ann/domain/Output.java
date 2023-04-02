@@ -1,14 +1,10 @@
 package ru.ann.domain;
 
-
 import java.util.Arrays;
 
-public enum CurrencyName {
-    ADM,
-    BGN,
-    EUR,
-    TRY,
-    USD;
+public enum Output {
+    GRAPH,
+    LIST;
 
     public static String valueForRegExp(){
         StringBuilder result = new StringBuilder();

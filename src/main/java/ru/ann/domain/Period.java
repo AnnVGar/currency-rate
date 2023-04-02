@@ -3,9 +3,11 @@ package ru.ann.domain;
 import java.util.Arrays;
 
 public enum Period {
-
+    DAY(1),
     TOMORROW(1),
-    WEEK(7);
+    WEEK(7),
+    MONTH(30);
+
 
     private final int dayQuantity;
 
@@ -17,9 +19,9 @@ public enum Period {
         return dayQuantity;
     }
 
-    public static String valueForRegExp(){
+    public static String valueForRegExp() {
         StringBuilder result = new StringBuilder();
-        Arrays.stream(values()).forEach(value -> result.append("\\b").append(value).append("\\b|"));
-        return result.substring(0,result.length()-1);
+        Arrays.stream(values()).forEach(value -> result.append(value).append("|"));
+        return result.substring(0, result.length() - 1);
     }
 }

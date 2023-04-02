@@ -26,7 +26,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (text.equals("/start")){
             sendMessageToChat(chatId,controller.сommandRules());
         }else{
-            controller.listenCommandFromConsole(text);
+            controller.parseCommandFromLine(text);
             sendMessageToChat(chatId,controller.printRate());
         }
     }

@@ -40,6 +40,6 @@ public class CommandService {
     }
 
     private LocalDate calculateNextDate(LocalDate previousDate){
-        return previousDate.isAfter(LocalDate.now()) ? previousDate.plusDays(1) : LocalDate.now().plusDays(1);
+        return previousDate.isAfter(LocalDate.now()) ? previousDate.plusDays(1) : command.getStartDate();
     }
 }

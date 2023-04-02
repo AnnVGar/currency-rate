@@ -17,7 +17,6 @@ public class App {
         CurrencyImportService.importCurrencyMap();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(new TelegramBot());
-//        new ConsoleController().listenCommandFromConsole(new AverageRate());
     }
 
 
