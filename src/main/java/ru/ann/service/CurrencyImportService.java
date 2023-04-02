@@ -1,5 +1,6 @@
 package ru.ann.service;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.ann.domain.CurrencyData;
 import ru.ann.domain.CurrencyName;
 import ru.ann.respository.CurrencyDataRespository;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 public class CurrencyImportService {
     private static final int RATE_DAY_QUANTITY = 7;
     private static final String SEPARATOR = File.separator;
@@ -49,7 +51,7 @@ public class CurrencyImportService {
                 currencyDataList.add(currencyData);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
+            log.error("File not found.");
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

@@ -2,32 +2,27 @@ package ru.ann.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.ann.algorithm.AlgorithmRate;
+import ru.ann.algorithm.AverageRate;
 import ru.ann.domain.Command;
 import ru.ann.domain.CurrencyName;
 import ru.ann.domain.Period;
 import ru.ann.service.CommandService;
 
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
-public class ConsoleController {
+public class TelegramController {
 
     private final Pattern RATE_COMMAND_PATTERN = Pattern.compile("RATE " + "(?:" + CurrencyName.valueForRegExp() + ") " + "(?:" + Period.valueForRegExp() + ")");
     private final CommandService commandService = new CommandService();
+    AlgorithmRate algorithmRate = new AverageRate();
 
     /**
      * получение и выполнение допустимой команды из консоли
      */
-    public void listenCommandFromConsole(AlgorithmRate algorithmRate) {
-        Scanner console = new Scanner(System.in);
-        log.info(сommandRules());
-        while (console.hasNextLine()) {
-            String commandLine = console.nextLine();
-            if (commandLine.equals("exit")) {
-                System.exit(0);
-            }
+    public  void listenCommandFromConsole(String message) {
+            String commandLine = message;
             Matcher matcher = RATE_COMMAND_PATTERN.matcher(commandLine.toUpperCase());
             if (matcher.matches()) {
                 String[] commandString = commandLine.split(" ");
@@ -40,20 +35,21 @@ public class ConsoleController {
             } else {
                 log.error("Wrong command");
             }
-        }
     }
 
 
     /**
      * вывод прогноза на экран
      */
-    private void printRate() {
+    public String printRate() {
+        StringBuilder result = new StringBuilder();
         Command command = commandService.getCommand();
         int dayQuantity = command.getPeriod().getDayQuantity();
         command.getCurrencyDataList().stream()
                 .sorted()
                 .limit(dayQuantity)
-                .forEach(currencyData ->log.info(currencyData.toString()));
+                .forEach(currencyData ->result.append(currencyData.toString()).append("\n"));
+        return result.toString();
     }
 
     /**
@@ -61,7 +57,7 @@ public class ConsoleController {
      *
      * @return строка с правилами
      */
-    public static String сommandRules() {
+    public String сommandRules() {
         return new StringBuilder("Write the command. What rate do you want? Print: \"rate %current  %period\"" + "\n")
                 .append("Current values: ")
                 .append(java.util.Arrays.asList(CurrencyName.values()))
