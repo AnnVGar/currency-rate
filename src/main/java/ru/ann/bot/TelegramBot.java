@@ -2,13 +2,21 @@ package ru.ann.bot;
 
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.ann.controller.TelegramController;
 
+import java.io.File;
+import java.io.IOException;
+
 public class TelegramBot extends TelegramLongPollingBot {
+
     TelegramController controller = new TelegramController();
+
     @Override
     public String getBotToken() {
         return "6080193367:AAGZnEQm7R-Fa_R6ZLdcGZLNp7LFvo3ePyI";
@@ -23,16 +31,42 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         String chatId = update.getMessage().getChatId().toString();
         String text = update.getMessage().getText();
-        if (text.equals("/start")){
-            sendMessageToChat(chatId,controller.сommandRules());
-        }else{
-            controller.parseCommandFromLine(text);
-            sendMessageToChat(chatId,controller.printRate());
+        if (text.equals("/start")) {
+            sendMessageToChat(chatId, controller.сommandRules());
+        } else {
+            String resultParseCommand = null;
+            resultParseCommand = controller.parseCommandFromLine(text);
+            if (resultParseCommand.equals("OK")) {
+                if (text.toUpperCase().endsWith("GRAPH")) {
+                    try {
+                        controller.getCurrencyRateToGraph();
+                        sendImageFromFileId("Chart.jpeg",chatId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    sendMessageToChat(chatId, controller.getCurrencyRateToString());
+                }
+            } else {
+                sendMessageToChat(chatId, resultParseCommand);
+            }
+        }
+    }
+
+    public void sendImageFromFileId(String fileId, String chatId) {
+        SendPhoto sendPhoto = new SendPhoto();
+        sendPhoto.setChatId(chatId);
+        sendPhoto.setPhoto(new InputFile(new File(fileId))) ;
+        try {
+            execute(sendPhoto);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
 
-    private void sendMessageToChat( String chatId, String text) {
+
+    private void sendMessageToChat(String chatId, String text) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText(text);
@@ -42,4 +76,5 @@ public class TelegramBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
+
 }

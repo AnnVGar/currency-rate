@@ -10,12 +10,13 @@ import java.util.Locale;
 @RequiredArgsConstructor
 @Getter
 public enum AlgorithmName {
-    AVERAGE(new AverageRate()),
-    MOON(new MoonAlgorithm()),
-    MIST(new MistAlgorithm()),
-    REGRESS(new LinearRegAlgorithm());
+    AVERAGE("AverageRate"),
+    MOON("MoonRate"),
+    MIST("MistRate"),
+    REGRESS("LinearRegRate");
 
-    private final AlgorithmRate algorithmRate;
+    private final String algorithmClassName;
+    private static final String packageName = "ru.ann.algorithm.";
 
     public static String valueForRegExp(){
         StringBuilder result = new StringBuilder();
@@ -23,8 +24,8 @@ public enum AlgorithmName {
         return result.substring(0,result.length()-1);
     }
 
-    public static AlgorithmName get (String name) {
-        return AlgorithmName.get(name.toUpperCase(Locale.ROOT));
+    public static String getFullAlgorithmClassName (String name) {
+        return packageName+AlgorithmName.valueOf(name.toUpperCase()).getAlgorithmClassName();
     }
 
 

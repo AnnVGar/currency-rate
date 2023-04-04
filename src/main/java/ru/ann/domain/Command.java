@@ -14,6 +14,7 @@ public class Command {
     private final LocalDate startDate;
     private final AlgorithmRate algorithmRate;
     private final List<CurrencyData> currencyDataList;
+    private final Output output;
 
     public Command(String currencyName, String period, LocalDate date, AlgorithmRate algorithmRate) {
         this.currencyName = CurrencyName.valueOf(currencyName.toUpperCase(Locale.ROOT));
@@ -21,13 +22,16 @@ public class Command {
         this.startDate = date;
         this.algorithmRate = algorithmRate;
         this.currencyDataList = CurrencyDataRespository.getListByCurrencyName(this.currencyName);
+        this.output = Output.valueOf("LIST");
     }
 
-    @Override
-    public String toString(){
-        return new StringBuilder(currencyName.name()).append(" ")
-                .append(period.name()).append(" ")
-                .append(startDate.toString()).append(" ").toString();
+    public Command(String currencyName, String period, LocalDate date, AlgorithmRate algorithmRate,String output) {
+        this.currencyName = CurrencyName.valueOf(currencyName.toUpperCase(Locale.ROOT));
+        this.period = Period.valueOf(period.toUpperCase(Locale.ROOT));
+        this.startDate = date;
+        this.algorithmRate = algorithmRate;
+        this.currencyDataList = CurrencyDataRespository.getListByCurrencyName(this.currencyName);
+        this.output = Output.valueOf(output);
     }
 
 }

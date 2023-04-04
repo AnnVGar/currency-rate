@@ -5,41 +5,43 @@ import ru.ann.domain.CurrencyData;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandService {
-    private Command command;
+    private List<Command> commandList = new ArrayList<>();
 
-    public void executeRate() {
-        for (int i = 0; i < command.getPeriod().getDayQuantity(); i++) {
-            addRateELement();
+    public List<CurrencyData> executeRate() {
+        List<CurrencyData> result= new ArrayList<>();
+        for(Command command: commandList){
+            result.addAll(executeRateForCommand(command));
         }
+        return result;
     }
 
-    public Command getCommand() {
-        return command;
+
+    public List<CurrencyData> executeRateForCommand(Command command) {
+        List<CurrencyData> result= new ArrayList<>();
+        for (int i = 0; i < command.getPeriod().getDayQuantity(); i++) {
+            result.add(calculateELement(i, command));
+        }
+        return result;
     }
 
-    /**
-     * Добавляем  прогнозируемый элемент в currencyDataList
-     * поле элемента value расчитываем фунуцией algorithmRate.getNextValue()
-     */
-    private void addRateELement() {
-        CurrencyData previous = command.getCurrencyDataList().stream().sorted().limit(1).toList().get(0);
+    private  CurrencyData calculateELement(int i, Command command) {
         CurrencyData newData = new CurrencyData();
-        newData.setDate(calculateNextDate(previous.getDate()));
-        newData.setCdx(previous.getCdx());
-        newData.setNominal(previous.getNominal());
-        BigDecimal value = command.getAlgorithmRate().getNextValue(command.getCurrencyDataList());
+        LocalDate date = command.getStartDate().plusDays(i);
+        newData.setDate(date);
+        newData.setCdx(command.getCurrencyName().getCdx());
+        newData.setNominal(1);
+        BigDecimal value = command.getAlgorithmRate().getNextValue(command.getCurrencyDataList(), date);
         newData.setValue(value);
-        newData.setCurs(value.multiply(new BigDecimal(previous.getNominal())));
-        command.getCurrencyDataList().add(newData);
+        newData.setCurs(value);
+        return newData;
     }
 
-    public void setCommand(Command command) {
-        this.command = command;
+    public void addCommand(Command command){
+        commandList.add(command);
     }
 
-    private LocalDate calculateNextDate(LocalDate previousDate){
-        return previousDate.isAfter(LocalDate.now()) ? previousDate.plusDays(1) : command.getStartDate();
-    }
 }

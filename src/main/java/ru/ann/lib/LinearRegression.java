@@ -1,4 +1,4 @@
-package edu.princeton.cs.algs4;
+package ru.ann.lib;
 
 
 /**
