@@ -12,11 +12,12 @@ import java.util.List;
 /**
  * класс расчета курса валюты
  * как средее арифметическое
+ * за неделю
  */
 @NoArgsConstructor
 public class AverageRate implements AlgorithmRate {
     private static final int ROWS_FOR_RATE = 7;
-    private static final int SCALE = 2;
+    private static final int SCALE = 4;
     private LinkedList<BigDecimal> valuesForRate = new LinkedList<>();
 
     @Override

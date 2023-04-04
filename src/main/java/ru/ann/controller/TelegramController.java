@@ -42,8 +42,6 @@ public class TelegramController {
         String commandLine = message.toUpperCase();
         Matcher matcherList = RATE_COMMAND_PATTERN_LIST.matcher(commandLine);
         Matcher matcherGraph = RATE_COMMAND_PATTERN_GRAPH.matcher(commandLine);
-        System.out.println(RATE_COMMAND_PATTERN_GRAPH);
-        System.out.println(message);
         if (matcherList.matches() || matcherGraph.matches()) {
             String[] commandArr = commandLine.split(" ");
             String[] currencyNameArr = commandArr[1].split(",");
@@ -67,11 +65,11 @@ public class TelegramController {
         }
     }
 
-    public String getCurrencyRateToString() {
+    public String convertCurrencyRateToString() {
         return rateToString(commandService.executeRate());
     }
 
-    public void getCurrencyRateToGraph() throws IOException {
+    public void saveCurrencyRateToGraph() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (CurrencyData data : commandService.executeRate()) {
             dataset.addValue(data.getValue(), data.getCdx(), data.getDate());
@@ -81,7 +79,11 @@ public class TelegramController {
         currencyGraph.setVisible(true);
         final ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
         final File file = new File("Chart.jpeg");
-        ChartUtils.saveChartAsJPEG(file, currencyGraph.getChart(), 600, 400, info);
+        try {
+            ChartUtils.saveChartAsJPEG(file, currencyGraph.getChart(), 600, 400, info);
+        } catch (IOException e) {
+            log.error("Save file error",e);
+        }
     }
 
 
@@ -95,11 +97,11 @@ public class TelegramController {
         try {
             algorithm = (AlgorithmRate) Class.forName(AlgorithmName.getFullAlgorithmClassName(algorithmName)).newInstance();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+          log.error("No class for algorithm",e);
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            log.error("Instance algorithm error",e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("Illigal access error",e);
         }
         return algorithm;
     }
@@ -114,20 +116,13 @@ public class TelegramController {
     }
 
 
-    /**
-     * получение списка прогноза
-     */
     public String rateToString(List<CurrencyData> list) {
         StringBuilder result = new StringBuilder();
         list.stream().sorted().forEach(currencyData -> result.append(currencyData.toString()).append("\n"));
         return result.toString();
     }
 
-    /**
-     * получение правил ввода команды
-     *
-     * @return строка с правилами
-     */
+
     public String сommandRules() {
         return new StringBuilder("Write the command(case - insensitive). What rate do you want? Print:")
                 .append("\n").append("\"rate %current -date %period -alg %algorithm -output %output\"" + "\n")

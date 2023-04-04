@@ -6,7 +6,7 @@ public enum Period {
     DAY(1),
     TOMORROW(1),
     WEEK(7),
-    MONTH(30);
+    MONTH(31);
 
 
     private final int dayQuantity;

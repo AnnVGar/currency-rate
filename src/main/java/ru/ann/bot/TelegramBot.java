@@ -1,8 +1,8 @@
 package ru.ann.bot;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -13,6 +13,7 @@ import ru.ann.controller.TelegramController;
 import java.io.File;
 import java.io.IOException;
 
+@Slf4j
 public class TelegramBot extends TelegramLongPollingBot {
 
     TelegramController controller = new TelegramController();
@@ -31,21 +32,16 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         String chatId = update.getMessage().getChatId().toString();
         String text = update.getMessage().getText();
-        if (text.equals("/start")) {
+        if (text.equals("/start") || text.equals("/help")) {
             sendMessageToChat(chatId, controller.сommandRules());
         } else {
-            String resultParseCommand = null;
-            resultParseCommand = controller.parseCommandFromLine(text);
+           String resultParseCommand = controller.parseCommandFromLine(text);
             if (resultParseCommand.equals("OK")) {
                 if (text.toUpperCase().endsWith("GRAPH")) {
-                    try {
-                        controller.getCurrencyRateToGraph();
-                        sendImageFromFileId("Chart.jpeg",chatId);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    controller.saveCurrencyRateToGraph();
+                    sendImageFromFileId("Chart.jpeg", chatId);
                 } else {
-                    sendMessageToChat(chatId, controller.getCurrencyRateToString());
+                    sendMessageToChat(chatId, controller.convertCurrencyRateToString());
                 }
             } else {
                 sendMessageToChat(chatId, resultParseCommand);
@@ -56,14 +52,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void sendImageFromFileId(String fileId, String chatId) {
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setChatId(chatId);
-        sendPhoto.setPhoto(new InputFile(new File(fileId))) ;
+        sendPhoto.setPhoto(new InputFile(new File(fileId)));
         try {
             execute(sendPhoto);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            sendMessageToChat(chatId, "problem with graph");
+            log.error("problem with graph",e);
         }
     }
-
 
 
     private void sendMessageToChat(String chatId, String text) {
@@ -73,8 +69,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             this.execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            sendMessageToChat(chatId, "problem with message");
+            log.error("problem with message",e);
         }
     }
-
 }

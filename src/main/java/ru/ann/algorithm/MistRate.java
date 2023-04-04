@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static ru.ann.algorithm.MoonRate.getNearestDataByDate;
+
+/**
+ * класс расчета курса валюты
+ * по дате рандомное количество лет назад
+ */
 @NoArgsConstructor
 public class MistRate implements AlgorithmRate {
     private static final int YEARS_DEPTH = 17;

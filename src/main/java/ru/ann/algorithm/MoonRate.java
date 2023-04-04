@@ -7,6 +7,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * класс расчета курса валюты
+ * по дате год назад
+ */
 @NoArgsConstructor
 public class MoonRate implements AlgorithmRate {
 
