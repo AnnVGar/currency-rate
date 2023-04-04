@@ -26,7 +26,7 @@ public class TelegramController {
     private final Pattern RATE_COMMAND_PATTERN_LIST = Pattern.compile("RATE " + "(" + CurrencyName.valueForRegExp() + ")"
             + " -DATE (" + Period.valueForRegExp() + "|\\d\\d.\\d\\d.\\d\\d\\d\\d)"
             + " -ALG (" + AlgorithmName.valueForRegExp() + ")"
-            + " -OUTPUT LIST");
+            + "( -OUTPUT LIST){0,1}");
     private final Pattern RATE_COMMAND_PATTERN_GRAPH = Pattern.compile("RATE " + "(" + CurrencyName.valueForRegExp() + ")" +
             "(,(" + CurrencyName.valueForRegExp() + ")){0,4}"
             + " -DATE (" + Period.valueForRegExp() + ")"
