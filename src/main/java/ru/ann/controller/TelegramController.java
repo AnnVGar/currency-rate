@@ -38,6 +38,7 @@ public class TelegramController {
      * получение и выполнение допустимой команды из консоли
      */
     public String parseCommandFromLine(String message) {
+        log.debug("Start to parse command "+message);
         commandService = new CommandService();
         String commandLine = message.toUpperCase();
         Matcher matcherList = RATE_COMMAND_PATTERN_LIST.matcher(commandLine);
@@ -58,6 +59,7 @@ public class TelegramController {
                 }
                 commandService.addCommand(command);
             }
+            log.info("Success command parse");
             return ("OK");
         } else {
             log.error("Wrong command");
@@ -127,7 +129,7 @@ public class TelegramController {
         return new StringBuilder("Write the command(case - insensitive). What rate do you want? Print:")
                 .append("\n").append("\"rate %current -date %period -alg %algorithm -output %output\"" + "\n")
                 .append("Current values: ").append(java.util.Arrays.asList(CurrencyName.values())).append("\n")
-                .append("For graph several currenсies separated by commas are possible.")
+                .append("For graph several currencies separated by commas are possible.")
                 .append("Period values: ").append(java.util.Arrays.asList(Period.values()))
                 .append(" or concrete date dd.mm.yyyy").append("\n").append("Algorithm values: ")
                 .append(java.util.Arrays.asList(AlgorithmName.values())).append("\n").append("Output values: ")
