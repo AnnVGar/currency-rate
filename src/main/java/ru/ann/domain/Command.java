@@ -34,4 +34,11 @@ public class Command {
         this.output = Output.valueOf(output);
     }
 
+    @Override
+    public String toString(){
+        return new StringBuilder(currencyName.name()).append(" ")
+                .append(period.name()).append(" ")
+                .append(startDate.toString()).append(" ").toString();
+    }
+
 }

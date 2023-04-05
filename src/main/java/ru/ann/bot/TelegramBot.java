@@ -11,7 +11,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.ann.controller.TelegramController;
 
 import java.io.File;
-import java.io.IOException;
 
 @Slf4j
 public class TelegramBot extends TelegramLongPollingBot {
@@ -33,7 +32,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         String chatId = update.getMessage().getChatId().toString();
         String text = update.getMessage().getText();
         if (text.equals("/start") || text.equals("/help")) {
-            sendMessageToChat(chatId, controller.сommandRules());
+            sendMessageToChat(chatId, controller.commandRules());
         } else {
            String resultParseCommand = controller.parseCommandFromLine(text);
             if (resultParseCommand.equals("OK")) {

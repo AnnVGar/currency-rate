@@ -10,7 +10,6 @@ public class App {
 
     public static void main(String[] args) throws TelegramApiException {
         App.start();
-
     }
 
     private static void start() throws TelegramApiException {

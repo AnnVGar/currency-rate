@@ -125,7 +125,7 @@ public class TelegramController {
     }
 
 
-    public String сommandRules() {
+    public String commandRules() {
         return new StringBuilder("Write the command(case - insensitive). What rate do you want? Print:")
                 .append("\n").append("\"rate %current -date %period -alg %algorithm -output %output\"" + "\n")
                 .append("Current values: ").append(java.util.Arrays.asList(CurrencyName.values())).append("\n")
