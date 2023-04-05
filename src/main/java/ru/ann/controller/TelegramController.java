@@ -79,12 +79,15 @@ public class TelegramController {
         LineChart currencyGraph = new LineChart("Currency rate", dataset);
         currencyGraph.pack();
         currencyGraph.setVisible(true);
-        final ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-        final File file = new File("Chart.jpeg");
+        ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+        File file = new File("Chart.jpeg");
+        file.delete();
         try {
             ChartUtils.saveChartAsJPEG(file, currencyGraph.getChart(), 600, 400, info);
         } catch (IOException e) {
             log.error("Save file error",e);
+        }catch(Exception e){
+            log.error("Plot file error",e);
         }
     }
 
