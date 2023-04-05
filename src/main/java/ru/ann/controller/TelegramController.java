@@ -38,7 +38,7 @@ public class TelegramController {
      * получение и выполнение допустимой команды из консоли
      */
     public String parseCommandFromLine(String message) {
-        log.debug("Start to parse command "+message);
+        log.debug("Start to parse command: "+message);
         commandService = new CommandService();
         String commandLine = message.toUpperCase();
         Matcher matcherList = RATE_COMMAND_PATTERN_LIST.matcher(commandLine);
