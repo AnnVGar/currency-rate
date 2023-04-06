@@ -41,11 +41,11 @@ public class CurrencyImportService {
             br.readLine();
             String str;
             while ((str = br.readLine()) != null) {
-                String[] commandLine = str.split(";");
-                int nominal = Integer.parseInt(commandLine[0].replace(" ",""));
-                LocalDate date = LocalDate.parse(commandLine[1], DateUtils.UPLOAD_FORMATTER);
-                BigDecimal curs = new BigDecimal(commandLine[2].replace(",","."));
-                String cdx = commandLine[3];
+                String[] dataArr = str.split(";");
+                int nominal = Integer.parseInt(dataArr[0].replace(" ",""));
+                LocalDate date = LocalDate.parse(dataArr[1], DateUtils.UPLOAD_FORMATTER);
+                BigDecimal curs = new BigDecimal(dataArr[2].replace(",","."));
+                String cdx = dataArr[3];
                 BigDecimal value = curs.divide(new BigDecimal(nominal), roundingMode);
                 CurrencyData currencyData = new CurrencyData(nominal, date, curs,cdx, value);
                 currencyDataList.add(currencyData);
