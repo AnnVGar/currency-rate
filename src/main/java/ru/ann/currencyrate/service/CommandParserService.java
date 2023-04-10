@@ -20,10 +20,9 @@ public class CommandParserService {
         String[] currencyNameArr = commandArr[CommandParserConstant.CURRENCY_INDEX].split(CommandParserConstant.CURRENCY_SPLIT);
         Period period = parsePeriod(commandArr[CommandParserConstant.PERIOD_INDEX]);
         LocalDate startDate = parseStartDate(period, commandArr[CommandParserConstant.PERIOD_INDEX]);
-        AlgorithmRate algorithmRate = parseAlgorithm(commandArr[CommandParserConstant.ALGORITHM_INDEX]);
-
         for (String name : currencyNameArr) {
             Command command;
+            AlgorithmRate algorithmRate = parseAlgorithm(commandArr[CommandParserConstant.ALGORITHM_INDEX]);
             CurrencyName currencyName = CurrencyName.valueOf(name.toUpperCase());
             if (commandArr.length == CommandParserConstant.NO_OUTPUT_LENGTH) {
                 command = new Command(currencyName, period, startDate, algorithmRate);
