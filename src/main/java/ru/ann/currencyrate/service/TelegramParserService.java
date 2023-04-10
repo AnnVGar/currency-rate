@@ -1,4 +1,4 @@
-package ru.ann.currencyrate.controller;
+package ru.ann.currencyrate.service;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @Getter
-public class TelegramController {
+public class TelegramParserService {
 
     private final Pattern RATE_COMMAND_PATTERN_LIST = Pattern.compile("RATE " + "(" + CurrencyName.valueForRegExp() + ")"
             + "(,(" + CurrencyName.valueForRegExp() + ")){0,4}"

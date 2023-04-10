@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.ann.currencyrate.common.BotConstant;
 import ru.ann.currencyrate.common.ResultConstant;
-import ru.ann.currencyrate.controller.TelegramController;
+import ru.ann.currencyrate.service.TelegramParserService;
 import ru.ann.currencyrate.domain.type.BotCommand;
 import ru.ann.currencyrate.domain.type.Output;
 
@@ -19,7 +19,7 @@ import java.io.File;
 @Slf4j
 public class TelegramBot extends TelegramLongPollingBot {
 
-    private final TelegramController controller = new TelegramController();
+    private final TelegramParserService controller = new TelegramParserService();
 
     @Override
     public String getBotToken() {
@@ -40,20 +40,24 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else {
             String resultParseCommand = controller.parseCommandFromLine(text);
             if (resultParseCommand.equals(ResultConstant.OK)) {
-                if (text.toUpperCase().endsWith(Output.GRAPH.getName())) {
-                    try {
-                        String fileName = controller.rateToJPEG(chatId);
-                        sendImageFromFileId(fileName, chatId);
-                    } catch (Exception e) {
-                        log.error(ResultConstant.ERROR, e.getMessage());
-                        sendMessageToChat(chatId, ResultConstant.ERROR);
-                    }
-                } else {
-                    sendMessageToChat(chatId, controller.rateToString());
-                }
+                replyToCommand(text, chatId);
             } else {
                 sendMessageToChat(chatId, resultParseCommand);
             }
+        }
+    }
+
+    private void replyToCommand(String text, String chatId) {
+        if (text.toUpperCase().endsWith(Output.GRAPH.getName())) {
+            try {
+                String fileName = controller.rateToJPEG(chatId);
+                sendImageFromFileId(fileName, chatId);
+            } catch (Exception e) {
+                log.error(ResultConstant.ERROR, e.getMessage());
+                sendMessageToChat(chatId, ResultConstant.ERROR);
+            }
+        } else {
+            sendMessageToChat(chatId, controller.rateToString());
         }
     }
 

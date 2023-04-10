@@ -25,12 +25,12 @@ public class Command {
         this.output = Output.LIST;
     }
 
-    public Command(List<CurrencyName> currencyNames, Period period, LocalDate date, AlgorithmRate algorithmRate, String output) {
+    public Command(List<CurrencyName> currencyNames, Period period, LocalDate date, AlgorithmRate algorithmRate, Output output) {
         this.currencyNames = currencyNames;
         this.period = period;
         this.startDate = date;
         this.algorithmRate = algorithmRate;
-        this.output = Output.valueOf(output);
+        this.output = output;
     }
 
     @Override

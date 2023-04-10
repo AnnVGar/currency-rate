@@ -15,7 +15,7 @@ public class CurrencyConstant {
     public static final int NAME_INDEX = 3;
     public static final String SEPARATOR = File.separator;
     public static final String EXTENSION = ".csv";
-    public static final String SOURCE_PATH = SEPARATOR + "src" + SEPARATOR + "main" + SEPARATOR + "resources" + SEPARATOR;
+    public static final String SOURCE_PATH = SEPARATOR + "src" + SEPARATOR + "main" + SEPARATOR + "resources" + SEPARATOR+"csv"+SEPARATOR;
 
 
 }

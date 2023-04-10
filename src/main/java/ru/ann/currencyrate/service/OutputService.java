@@ -33,8 +33,6 @@ public class OutputService {
             return fileName;
         } catch (IOException e) {
             log.error("Save file error", e);
-        } catch (Exception e) {
-            log.error("Plot file error", e);
         }
         return null;
     }

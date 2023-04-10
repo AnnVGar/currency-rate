@@ -20,21 +20,4 @@ public enum AlgorithmName {
         return result.substring(0, result.length() - 1);
     }
 
-    public static AlgorithmRate initAlgorithm(String name) {
-        AlgorithmName algorithmName = AlgorithmName.valueOf(name);
-        switch (algorithmName) {
-            case AVERAGE:
-                return new AverageRate();
-            case MOON:
-                return new MoonRate();
-            case MIST:
-                return new MistRate();
-            case REGRESS:
-                return new LinearRegRate();
-            default:
-                return null;
-        }
-    }
-
-
 }

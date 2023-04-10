@@ -6,7 +6,12 @@ import ru.ann.currencyrate.common.CurrencyConstant;
 import ru.ann.currencyrate.domain.Command;
 import ru.ann.currencyrate.domain.type.AlgorithmName;
 import ru.ann.currencyrate.domain.type.CurrencyName;
+import ru.ann.currencyrate.domain.type.Output;
 import ru.ann.currencyrate.domain.type.Period;
+import ru.ann.currencyrate.service.algorithm.AverageRate;
+import ru.ann.currencyrate.service.algorithm.LinearRegRate;
+import ru.ann.currencyrate.service.algorithm.MistRate;
+import ru.ann.currencyrate.service.algorithm.MoonRate;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,7 +30,7 @@ public class CommandParserService {
         if (commandArr.length == CommandParserConstant.NO_OUTPUT_LENGTH) {
             command = new Command(currencyNames, period, startDate, algorithmRate);
         } else {
-            String output = commandArr[CommandParserConstant.OUTPUT_INDEX];
+            Output output = Output.valueOf(commandArr[CommandParserConstant.OUTPUT_INDEX]);
             command = new Command(currencyNames, period, startDate, algorithmRate, output);
         }
         return command;
@@ -44,14 +49,30 @@ public class CommandParserService {
     }
 
     private AlgorithmRate parseAlgorithm(String algorithmName) {
-        return AlgorithmName.initAlgorithm(algorithmName);
+        return initAlgorithm(algorithmName);
     }
 
     private Period parsePeriod(String period) {
         try {
             return Period.valueOf(period);
         } catch (IllegalArgumentException e) {
-            return Period.valueOf("DAY");
+            return Period.DAY;
+        }
+    }
+
+    private static AlgorithmRate initAlgorithm(String name) {
+        AlgorithmName algorithmName = AlgorithmName.valueOf(name);
+        switch (algorithmName) {
+            case AVERAGE:
+                return new AverageRate();
+            case MOON:
+                return new MoonRate();
+            case MIST:
+                return new MistRate();
+            case REGRESS:
+                return new LinearRegRate();
+            default:
+                return null;
         }
     }
 }
