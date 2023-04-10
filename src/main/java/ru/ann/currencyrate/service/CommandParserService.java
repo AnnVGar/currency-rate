@@ -14,23 +14,27 @@ import java.util.List;
 
 public class CommandParserService {
 
-    public List<Command> parserCommandFromLine(String commandLine) {
-        List<Command> result = new ArrayList<>();
+    public Command parserCommandFromLine(String commandLine) {
         String[] commandArr = commandLine.toUpperCase().split(CommandParserConstant.COMMAND_SPLIT);
         String[] currencyNameArr = commandArr[CommandParserConstant.CURRENCY_INDEX].split(CommandParserConstant.CURRENCY_SPLIT);
+        List<CurrencyName> currencyNames = listFromNameArr(currencyNameArr);
         Period period = parsePeriod(commandArr[CommandParserConstant.PERIOD_INDEX]);
         LocalDate startDate = parseStartDate(period, commandArr[CommandParserConstant.PERIOD_INDEX]);
+        Command command;
+        AlgorithmRate algorithmRate = parseAlgorithm(commandArr[CommandParserConstant.ALGORITHM_INDEX]);
+        if (commandArr.length == CommandParserConstant.NO_OUTPUT_LENGTH) {
+            command = new Command(currencyNames, period, startDate, algorithmRate);
+        } else {
+            String output = commandArr[CommandParserConstant.OUTPUT_INDEX];
+            command = new Command(currencyNames, period, startDate, algorithmRate, output);
+        }
+        return command;
+    }
+
+    private List<CurrencyName> listFromNameArr(String[] currencyNameArr) {
+        List<CurrencyName> result = new ArrayList<>();
         for (String name : currencyNameArr) {
-            Command command;
-            AlgorithmRate algorithmRate = parseAlgorithm(commandArr[CommandParserConstant.ALGORITHM_INDEX]);
-            CurrencyName currencyName = CurrencyName.valueOf(name.toUpperCase());
-            if (commandArr.length == CommandParserConstant.NO_OUTPUT_LENGTH) {
-                command = new Command(currencyName, period, startDate, algorithmRate);
-            } else {
-                String output = commandArr[CommandParserConstant.OUTPUT_INDEX];
-                command = new Command(currencyName, period, startDate, algorithmRate, output);
-            }
-            result.add(command);
+            result.add(CurrencyName.valueOf(name));
         }
         return result;
     }

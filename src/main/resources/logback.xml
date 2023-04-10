@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="FILE-AUDIT"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE-AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>debug.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} - %msg%n
-            </Pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n </pattern>
         </encoder>
-
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>/archived/debug.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
@@ -16,15 +19,15 @@
                 <maxFileSize>10MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
-
     </appender>
 
-    <logger name="curency-logger" level="INFO">
-        <appender-ref ref="FILE-AUDIT" />
-    </logger>
+<!--    <logger name="curency-logger" level="INFO">-->
+<!--        <appender-ref ref="FILE-AUDIT" />-->
+<!--    </logger>-->
 
     <root level="INFO">
-        <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="FILE-AUDIT"/>
+        <appender-ref ref="STDOUT"/>
     </root>
 
 </configuration>

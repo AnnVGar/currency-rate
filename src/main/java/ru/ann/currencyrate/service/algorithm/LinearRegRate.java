@@ -46,4 +46,9 @@ public class LinearRegRate implements AlgorithmRate {
                 .toArray();
 
     }
+
+    @Override
+    public void clear() {
+        linearRegression = null;
+    }
 }

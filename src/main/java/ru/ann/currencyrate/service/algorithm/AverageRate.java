@@ -39,4 +39,9 @@ public class AverageRate implements AlgorithmRate {
             valuesForRate.add(currencyData.getUnitCurs());
         }
     }
+
+    @Override
+    public void clear() {
+        valuesForRate.clear();
+    }
 }

@@ -5,41 +5,41 @@ import ru.ann.currencyrate.api.AlgorithmRate;
 import ru.ann.currencyrate.domain.type.CurrencyName;
 import ru.ann.currencyrate.domain.type.Output;
 import ru.ann.currencyrate.domain.type.Period;
-import ru.ann.currencyrate.repository.CurrencyDataRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 public class Command {
-    private final CurrencyName currencyName;
+    private final List<CurrencyName> currencyNames;
     private final Period period;
     private final LocalDate startDate;
     private final AlgorithmRate algorithmRate;
-    private final List<CurrencyData> currencyDataList;
     private final Output output;
 
-    public Command(CurrencyName currencyName, Period period, LocalDate date, AlgorithmRate algorithmRate) {
-        this.currencyName = currencyName;
+    public Command(List<CurrencyName> currencyNames, Period period, LocalDate date, AlgorithmRate algorithmRate) {
+        this.currencyNames = currencyNames;
         this.period = period;
         this.startDate = date;
         this.algorithmRate = algorithmRate;
-        this.currencyDataList = CurrencyDataRepository.getListByCurrencyName(this.currencyName);
         this.output = Output.LIST;
     }
 
-    public Command(CurrencyName currencyName, Period period, LocalDate date, AlgorithmRate algorithmRate, String output) {
-        this.currencyName = currencyName;
+    public Command(List<CurrencyName> currencyNames, Period period, LocalDate date, AlgorithmRate algorithmRate, String output) {
+        this.currencyNames = currencyNames;
         this.period = period;
         this.startDate = date;
         this.algorithmRate = algorithmRate;
-        this.currencyDataList = CurrencyDataRepository.getListByCurrencyName(this.currencyName);
         this.output = Output.valueOf(output);
     }
 
     @Override
     public String toString() {
-        return currencyName.name() + " " + period.name() + " " + startDate.toString();
+        return currencyToString() + " " + period.name() + " " + startDate.toString();
+    }
+
+    private String currencyToString() {
+        return String.join(",", currencyNames.stream().map(currencyName -> currencyName.getName()).toList());
     }
 
 }

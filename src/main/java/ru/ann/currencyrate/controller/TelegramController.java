@@ -3,7 +3,6 @@ package ru.ann.currencyrate.controller;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import ru.ann.currencyrate.common.ResultConstant;
-import ru.ann.currencyrate.domain.Command;
 import ru.ann.currencyrate.domain.CurrencyData;
 import ru.ann.currencyrate.domain.type.AlgorithmName;
 import ru.ann.currencyrate.domain.type.CurrencyName;
@@ -11,7 +10,7 @@ import ru.ann.currencyrate.domain.type.Output;
 import ru.ann.currencyrate.domain.type.Period;
 import ru.ann.currencyrate.service.CommandParserService;
 import ru.ann.currencyrate.service.CommandService;
-import ru.ann.currencyrate.service.algorithm.OutputService;
+import ru.ann.currencyrate.service.OutputService;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -31,8 +30,8 @@ public class TelegramController {
             + " -DATE (" + Period.valueForRegExp() + ")"
             + " -ALG (" + AlgorithmName.valueForRegExp() + ")"
             + " -OUTPUT GRAPH");
-    private CommandService commandService;
-    private CommandParserService parserCommandService = new CommandParserService();
+    private final CommandService commandService = new CommandService();
+    private final CommandParserService parserCommandService = new CommandParserService();
     private final OutputService outputService = new OutputService();
 
     /**
@@ -40,14 +39,11 @@ public class TelegramController {
      */
     public String parseCommandFromLine(String message) {
         log.debug("Start to parse command: " + message);
-        commandService = new CommandService();
         String commandLine = message.toUpperCase();
         Matcher matcherList = RATE_COMMAND_PATTERN_LIST.matcher(commandLine);
         Matcher matcherGraph = RATE_COMMAND_PATTERN_GRAPH.matcher(commandLine);
         if (matcherList.matches() || matcherGraph.matches()) {
-            for (Command command : parserCommandService.parserCommandFromLine(message)) {
-                commandService.addCommand(command);
-            }
+            commandService.setCommand(parserCommandService.parserCommandFromLine(message));
             log.info("Success command parse " + message);
             return (ResultConstant.OK);
         } else {

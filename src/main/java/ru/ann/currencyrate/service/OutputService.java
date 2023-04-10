@@ -1,4 +1,4 @@
-package ru.ann.currencyrate.service.algorithm;
+package ru.ann.currencyrate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jfree.chart.ChartRenderingInfo;
