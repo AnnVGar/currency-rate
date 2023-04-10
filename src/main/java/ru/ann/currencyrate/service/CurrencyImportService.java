@@ -1,14 +1,13 @@
 package ru.ann.currencyrate.service;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.ann.currencyrate.common.CurrencyConstant;
 import ru.ann.currencyrate.domain.CurrencyData;
 import ru.ann.currencyrate.domain.type.CurrencyName;
 import ru.ann.currencyrate.repository.CurrencyDataRepository;
-import ru.ann.currencyrate.common.CurrencyConstant;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +28,7 @@ public class CurrencyImportService {
      */
     private static List<CurrencyData> fillCurrencyDataList(CurrencyName currencyName) {
         List<CurrencyData> currencyDataList = new ArrayList<>();
-        File file = new File(chageDirectory()+"." +CurrencyConstant.SOURCE_PATH + currencyName.name().toLowerCase() + CurrencyConstant.EXTENSION);
+        File file = new File(chageDirectory() + "." + CurrencyConstant.SOURCE_PATH + currencyName.name().toLowerCase() + CurrencyConstant.EXTENSION);
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine();
             String str;

@@ -14,8 +14,8 @@ import java.util.List;
 
 public class CommandParserService {
 
-    public List<Command> parserCommandFromLine (String commandLine){
-        List<Command> result  =new ArrayList<>();
+    public List<Command> parserCommandFromLine(String commandLine) {
+        List<Command> result = new ArrayList<>();
         String[] commandArr = commandLine.toUpperCase().split(CommandParserConstant.COMMAND_SPLIT);
         String[] currencyNameArr = commandArr[CommandParserConstant.CURRENCY_INDEX].split(CommandParserConstant.CURRENCY_SPLIT);
         Period period = parsePeriod(commandArr[CommandParserConstant.PERIOD_INDEX]);

@@ -19,5 +19,4 @@ public class CurrencyDataRepository {
         return getCurrencyMap().get(currencyName);
     }
 
-
 }

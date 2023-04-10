@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * интерфейс расчета курса валюты
- *
  */
 public interface AlgorithmRate {
     BigDecimal getNextValue(List<CurrencyData> list, LocalDate date);

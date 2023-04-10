@@ -21,9 +21,8 @@ public class MistRate implements AlgorithmRate {
 
     @Override
     public BigDecimal getNextValue(List<CurrencyData> list, LocalDate date) {
-        int yearRandom =  ThreadLocalRandom.current().nextInt(1, YEARS_DEPTH + 1);
-                return getNearestDataByDate(date.minusYears(yearRandom), list).getUnitCurs();
+        int yearRandom = ThreadLocalRandom.current().nextInt(1, YEARS_DEPTH + 1);
+        return getNearestDataByDate(date.minusYears(yearRandom), list).getUnitCurs();
     }
-
 
 }

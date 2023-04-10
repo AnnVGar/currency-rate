@@ -2,25 +2,17 @@ package ru.ann.currencyrate.controller;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.jfree.chart.ChartRenderingInfo;
-import org.jfree.chart.ChartUtils;
-import org.jfree.chart.entity.StandardEntityCollection;
-import org.jfree.data.category.DefaultCategoryDataset;
-import ru.ann.currencyrate.common.ChartConstant;
+import ru.ann.currencyrate.common.ResultConstant;
 import ru.ann.currencyrate.domain.Command;
 import ru.ann.currencyrate.domain.CurrencyData;
 import ru.ann.currencyrate.domain.type.AlgorithmName;
 import ru.ann.currencyrate.domain.type.CurrencyName;
 import ru.ann.currencyrate.domain.type.Output;
 import ru.ann.currencyrate.domain.type.Period;
-import ru.ann.currencyrate.service.CommandService;
 import ru.ann.currencyrate.service.CommandParserService;
+import ru.ann.currencyrate.service.CommandService;
 import ru.ann.currencyrate.service.algorithm.OutputService;
-import ru.ann.currencyrate.util.LineChart;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,11 +22,12 @@ import java.util.regex.Pattern;
 public class TelegramController {
 
     private final Pattern RATE_COMMAND_PATTERN_LIST = Pattern.compile("RATE " + "(" + CurrencyName.valueForRegExp() + ")"
+            + "(,(" + CurrencyName.valueForRegExp() + ")){0,4}"
             + " -DATE (" + Period.valueForRegExp() + "|\\d\\d.\\d\\d.\\d\\d\\d\\d)"
             + " -ALG (" + AlgorithmName.valueForRegExp() + ")"
             + "( -OUTPUT LIST){0,1}");
-    private final Pattern RATE_COMMAND_PATTERN_GRAPH = Pattern.compile("RATE " + "(" + CurrencyName.valueForRegExp() + ")" +
-            "(,(" + CurrencyName.valueForRegExp() + ")){0,4}"
+    private final Pattern RATE_COMMAND_PATTERN_GRAPH = Pattern.compile("RATE " + "(" + CurrencyName.valueForRegExp() + ")"
+            + "(,(" + CurrencyName.valueForRegExp() + ")){0,4}"
             + " -DATE (" + Period.valueForRegExp() + ")"
             + " -ALG (" + AlgorithmName.valueForRegExp() + ")"
             + " -OUTPUT GRAPH");
@@ -52,27 +45,27 @@ public class TelegramController {
         Matcher matcherList = RATE_COMMAND_PATTERN_LIST.matcher(commandLine);
         Matcher matcherGraph = RATE_COMMAND_PATTERN_GRAPH.matcher(commandLine);
         if (matcherList.matches() || matcherGraph.matches()) {
-            for (Command command: parserCommandService.parserCommandFromLine(message)){
+            for (Command command : parserCommandService.parserCommandFromLine(message)) {
                 commandService.addCommand(command);
             }
-            log.info("Success command parse");
-            return ("OK");
+            log.info("Success command parse " + message);
+            return (ResultConstant.OK);
         } else {
-            log.error("Wrong command");
-            return ("Wrong command");
+            log.error("Wrong command " + message);
+            return (ResultConstant.BAD_COMMAND);
         }
     }
 
-    public List<CurrencyData> executeRate(){
+    public List<CurrencyData> executeRate() {
         return commandService.executeRate();
     }
 
-    public String rateToString(){
+    public String rateToString() {
         return outputService.rateToString(executeRate());
     }
 
-    public String rateToJPEG(String chartId){
-       return outputService.saveCurrencyRateToGraph(executeRate(),chartId);
+    public String rateToJPEG(String chartId) {
+        return outputService.saveCurrencyRateToGraph(executeRate(), chartId);
     }
 
 

@@ -15,11 +15,11 @@ public enum CurrencyName {
     TRY("Турецкая лира"),
     USD("Доллар США");
 
-   private final String name;
+    private final String name;
 
-    public static String valueForRegExp(){
+    public static String valueForRegExp() {
         StringBuilder result = new StringBuilder();
         Arrays.stream(values()).forEach(value -> result.append(value).append("|"));
-        return result.substring(0,result.length()-1);
+        return result.substring(0, result.length() - 1);
     }
 }

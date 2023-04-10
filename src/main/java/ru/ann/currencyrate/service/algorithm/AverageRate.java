@@ -23,7 +23,7 @@ public class AverageRate implements AlgorithmRate {
 
     @Override
     public BigDecimal getNextValue(List<CurrencyData> list, LocalDate date) {
-        if (valuesForRate.size() == 0) {
+        if (valuesForRate.isEmpty()) {
             initValuesForRate(list);
         }
         BigDecimal sum = valuesForRate.stream().reduce(BigDecimal.ZERO, BigDecimal::add);

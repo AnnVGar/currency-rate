@@ -8,7 +8,7 @@ import ru.ann.currencyrate.domain.type.Period;
 import ru.ann.currencyrate.repository.CurrencyDataRepository;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 
 @Getter
 public class Command {
@@ -28,7 +28,7 @@ public class Command {
         this.output = Output.LIST;
     }
 
-    public Command(CurrencyName currencyName, Period period, LocalDate date, AlgorithmRate algorithmRate,String output) {
+    public Command(CurrencyName currencyName, Period period, LocalDate date, AlgorithmRate algorithmRate, String output) {
         this.currencyName = currencyName;
         this.period = period;
         this.startDate = date;
@@ -38,8 +38,8 @@ public class Command {
     }
 
     @Override
-    public String toString(){
-        return currencyName.name()+" "+period.name()+" "+startDate.toString();
+    public String toString() {
+        return currencyName.name() + " " + period.name() + " " + startDate.toString();
     }
 
 }

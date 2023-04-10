@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 public class OutputService {
-    public String saveCurrencyRateToGraph(List<CurrencyData> currencyDataList,String chartID) {
+    public String saveCurrencyRateToGraph(List<CurrencyData> currencyDataList, String chartID) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (CurrencyData data : currencyDataList) {
             dataset.addValue(data.getUnitCurs(), data.getName(), data.getDate());
@@ -25,7 +25,7 @@ public class OutputService {
         currencyGraph.pack();
         currencyGraph.setVisible(true);
         ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-        String fileName = ChartConstant.FILE_NAME+chartID+ChartConstant.FILE_EXTENSION;
+        String fileName = ChartConstant.FILE_NAME + chartID + ChartConstant.FILE_EXTENSION;
         File file = new File(fileName);
         file.delete();
         try {

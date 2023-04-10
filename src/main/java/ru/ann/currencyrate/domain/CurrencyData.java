@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
-public class CurrencyData implements Comparable<CurrencyData>{
+public class CurrencyData implements Comparable<CurrencyData> {
 
     private final int nominal;
     private final LocalDate date;
@@ -28,7 +28,6 @@ public class CurrencyData implements Comparable<CurrencyData>{
     public int compareTo(CurrencyData o2) {
         return this.getDate().isAfter(o2.getDate()) ? -1 : 1;
     }
-
 
 
 }
