@@ -19,8 +19,7 @@
 
     </appender>
 
-    <logger name="curency-logger" level="INFO"
-            additivity="false">
+    <logger name="curency-logger" level="INFO">
         <appender-ref ref="FILE-AUDIT" />
     </logger>
 
