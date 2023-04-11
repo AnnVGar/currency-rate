@@ -1,7 +1,5 @@
 package ru.ann.currencyrate.domain.type;
 
-import java.util.Arrays;
-
 public enum Period {
     DAY(1),
     TOMORROW(1),
@@ -19,9 +17,4 @@ public enum Period {
         return dayQuantity;
     }
 
-    public static String valueForRegExp() {
-        StringBuilder result = new StringBuilder();
-        Arrays.stream(values()).forEach(value -> result.append(value).append("|"));
-        return result.substring(0, result.length() - 1);
-    }
 }

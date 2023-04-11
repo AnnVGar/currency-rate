@@ -21,7 +21,7 @@ public class CommandParserService {
 
     public Command parserCommandFromLine(String commandLine) {
         String[] commandArr = commandLine.toUpperCase().split(CommandParserConstant.COMMAND_SPLIT);
-        String[] currencyNameArr = commandArr[CommandParserConstant.CURRENCY_INDEX].split(CommandParserConstant.CURRENCY_SPLIT);
+        String[] currencyNameArr = commandArr[CommandParserConstant.CURRENCY_INDEX].split(CurrencyConstant.CURRENCY_SPLIT);
         List<CurrencyName> currencyNames = listFromNameArr(currencyNameArr);
         Period period = parsePeriod(commandArr[CommandParserConstant.PERIOD_INDEX]);
         LocalDate startDate = parseStartDate(period, commandArr[CommandParserConstant.PERIOD_INDEX]);
@@ -62,17 +62,12 @@ public class CommandParserService {
 
     private static AlgorithmRate initAlgorithm(String name) {
         AlgorithmName algorithmName = AlgorithmName.valueOf(name);
-        switch (algorithmName) {
-            case AVERAGE:
-                return new AverageRate();
-            case MOON:
-                return new MoonRate();
-            case MIST:
-                return new MistRate();
-            case REGRESS:
-                return new LinearRegRate();
-            default:
-                return null;
-        }
+        return switch (algorithmName) {
+            case AVERAGE -> new AverageRate();
+            case MOON -> new MoonRate();
+            case MIST -> new MistRate();
+            case REGRESS -> new LinearRegRate();
+            default -> null;
+        };
     }
 }

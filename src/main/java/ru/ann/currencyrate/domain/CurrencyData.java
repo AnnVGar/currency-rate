@@ -15,7 +15,7 @@ public class CurrencyData implements Comparable<CurrencyData> {
 
     private final int nominal;
     private final LocalDate date;
-    private final BigDecimal curs;
+    private final BigDecimal course;
     private final String name;
     private final BigDecimal unitCurs;
 

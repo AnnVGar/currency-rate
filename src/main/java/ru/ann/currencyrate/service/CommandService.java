@@ -10,7 +10,6 @@ import ru.ann.currencyrate.repository.CurrencyDataRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -30,7 +29,7 @@ public class CommandService {
 
     public List<CurrencyData> executeRateForCurrency(CurrencyName currency) {
         log.debug("execute rate " + currency);
-        List<CurrencyData> result = new LinkedList<>();
+        List<CurrencyData> result = new ArrayList<>();
         for (int i = 0; i < command.getPeriod().getDayQuantity(); i++) {
             result.add(calculateELement(i, currency));
         }

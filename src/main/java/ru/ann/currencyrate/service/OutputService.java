@@ -7,6 +7,10 @@ import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.data.category.DefaultCategoryDataset;
 import ru.ann.currencyrate.common.ChartConstant;
 import ru.ann.currencyrate.domain.CurrencyData;
+import ru.ann.currencyrate.domain.type.AlgorithmName;
+import ru.ann.currencyrate.domain.type.CurrencyName;
+import ru.ann.currencyrate.domain.type.Output;
+import ru.ann.currencyrate.domain.type.Period;
 import ru.ann.currencyrate.util.LineChart;
 
 import java.io.File;
@@ -41,5 +45,15 @@ public class OutputService {
         StringBuilder result = new StringBuilder();
         list.stream().sorted(Collections.reverseOrder()).forEach(currencyData -> result.append(currencyData.toString()).append("\n"));
         return result.toString();
+    }
+
+    public String commandRules() {
+        return "Write the command(case - insensitive). What rate do you want? Print:" + "\n"
+                + "\"rate %current -date %period -alg %algorithm -output %output\"" + "\n"
+                + "Current values: " + java.util.Arrays.asList(CurrencyName.values()) + "\n"
+                + "For graph several currencies separated by commas are possible." + "\n"
+                + "Period values: " + java.util.Arrays.asList(Period.values()) + " or concrete date dd.mm.yyyy" + "\n"
+                + "Algorithm values: " + java.util.Arrays.asList(AlgorithmName.values()) + "\n"
+                + "Output values: " + java.util.Arrays.asList(Output.values());
     }
 }

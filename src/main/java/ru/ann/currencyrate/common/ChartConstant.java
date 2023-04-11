@@ -9,7 +9,7 @@ public class ChartConstant {
     public static final int PANEL_HEIGHT = 500;
     public static final String TITLE = "Currency rate";
     public static final String XLABLE = "Date";
-    public static final String YLABLE = "Curs";
+    public static final String YLABLE = "Course";
 
 
 }

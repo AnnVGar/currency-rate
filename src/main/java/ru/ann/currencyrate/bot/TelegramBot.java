@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.ann.currencyrate.common.BotConstant;
 import ru.ann.currencyrate.common.ResultConstant;
-import ru.ann.currencyrate.service.TelegramParserService;
+import ru.ann.currencyrate.controller.TelegramController;
 import ru.ann.currencyrate.domain.type.BotCommand;
 import ru.ann.currencyrate.domain.type.Output;
 
@@ -19,7 +19,7 @@ import java.io.File;
 @Slf4j
 public class TelegramBot extends TelegramLongPollingBot {
 
-    private final TelegramParserService controller = new TelegramParserService();
+    private final TelegramController controller = new TelegramController();
 
     @Override
     public String getBotToken() {
@@ -36,13 +36,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         String chatId = update.getMessage().getChatId().toString();
         String text = update.getMessage().getText();
         if (text.equals(BotCommand.START.getCommand()) || text.equals(BotCommand.HELP.getCommand())) {
-            sendMessageToChat(chatId, controller.commandRules());
+            sendMessageToChat(chatId, controller.getOutputService().commandRules());
         } else {
-            String resultParseCommand = controller.parseCommandFromLine(text);
-            if (resultParseCommand.equals(ResultConstant.OK)) {
-                replyToCommand(text, chatId);
+            String rightCommand = controller.getValidationService().validateCommandFromLine(text);
+            if (rightCommand == null) {
+                sendMessageToChat(chatId, ResultConstant.BAD_COMMAND);
             } else {
-                sendMessageToChat(chatId, resultParseCommand);
+                controller.setCommand(controller.getCommandParserService().parserCommandFromLine(rightCommand));
+                replyToCommand(text, chatId);
             }
         }
     }
@@ -50,14 +51,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void replyToCommand(String text, String chatId) {
         if (text.toUpperCase().endsWith(Output.GRAPH.getName())) {
             try {
-                String fileName = controller.rateToJPEG(chatId);
+                String fileName = controller.getOutputService().saveCurrencyRateToGraph(controller.getCommandService().executeRate(), chatId);
                 sendImageFromFileId(fileName, chatId);
             } catch (Exception e) {
                 log.error(ResultConstant.ERROR, e.getMessage());
                 sendMessageToChat(chatId, ResultConstant.ERROR);
             }
         } else {
-            sendMessageToChat(chatId, controller.rateToString());
+            sendMessageToChat(chatId, controller.getOutputService().rateToString(controller.getCommandService().executeRate()));
         }
     }
 

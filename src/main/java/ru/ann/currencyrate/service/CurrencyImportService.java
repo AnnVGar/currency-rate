@@ -8,6 +8,7 @@ import ru.ann.currencyrate.repository.CurrencyDataRepository;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,34 +29,28 @@ public class CurrencyImportService {
      */
     private static List<CurrencyData> fillCurrencyDataList(CurrencyName currencyName) {
         List<CurrencyData> currencyDataList = new ArrayList<>();
-        File file = new File(chageDirectory() + "." + CurrencyConstant.SOURCE_PATH + currencyName.name().toLowerCase() + CurrencyConstant.EXTENSION);
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            br.readLine();
-            String str;
-            while ((str = br.readLine()) != null) {
-                String[] dataArr = str.split(";");
-                int nominal = Integer.parseInt(dataArr[CurrencyConstant.NOMINAL_INDEX].replace(" ", ""));
-                LocalDate date = LocalDate.parse(dataArr[CurrencyConstant.DATE_INDEX], CurrencyConstant.UPLOAD_FORMATTER);
-                BigDecimal curs = new BigDecimal(dataArr[CurrencyConstant.CURS_INDEX].replace(",", "."));
-                String name = dataArr[CurrencyConstant.NAME_INDEX];
-                BigDecimal unitCurs = curs.divide(new BigDecimal(nominal), CurrencyConstant.ROUNDING_MODE);
-                CurrencyData currencyData = new CurrencyData(nominal, date, curs, name, unitCurs);
-                currencyDataList.add(currencyData);
-            }
-        } catch (FileNotFoundException e) {
+        InputStream inputStream = CurrencyImportService.class.getClassLoader().getResourceAsStream(CurrencyConstant.SOURCE_PATH + currencyName + CurrencyConstant.EXTENSION);
+        if (inputStream == null) {
             log.error("File not found.");
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+                br.readLine();
+                String str;
+                while ((str = br.readLine()) != null) {
+                    String[] dataArr = str.split(";");
+                    int nominal = Integer.parseInt(dataArr[CurrencyConstant.NOMINAL_INDEX].replace(" ", ""));
+                    LocalDate date = LocalDate.parse(dataArr[CurrencyConstant.DATE_INDEX], CurrencyConstant.UPLOAD_FORMATTER);
+                    BigDecimal curs = new BigDecimal(dataArr[CurrencyConstant.CURS_INDEX].replace(",", "."));
+                    String name = dataArr[CurrencyConstant.NAME_INDEX];
+                    BigDecimal unitCurs = curs.divide(new BigDecimal(nominal), CurrencyConstant.ROUNDING_MODE);
+                    CurrencyData currencyData = new CurrencyData(nominal, date, curs, name, unitCurs);
+                    currencyDataList.add(currencyData);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return currencyDataList;
     }
 
-    private static String chageDirectory() {
-        String currentFile = System.getProperty("user.dir");
-        if (currentFile.endsWith("target")) {
-            return File.separator + "." + File.separator;
-        }
-        return "";
-    }
 }
